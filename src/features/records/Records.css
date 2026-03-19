@@ -1,0 +1,279 @@
+.records-container {
+  padding: 30px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.records-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.records-filters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.search-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-filter label {
+  color: #666;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: all 0.3s;
+  min-width: 220px;
+}
+
+.search-input:hover,
+.search-input:focus {
+  border-color: #325473;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.date-filter label {
+  color: #666;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.date-input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.date-input:hover,
+.date-input:focus {
+  border-color: #325473;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  padding: 40px;
+  font-size: 16px;
+}
+
+.table-wrapper {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  margin-bottom: 30px;
+}
+
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.records-table thead {
+  background: url('/Background.png') center/cover no-repeat;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.records-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.records-table tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: all 0.2s;
+}
+
+.records-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.records-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+.date-cell {
+  font-weight: 500;
+  width: 18%;
+}
+
+.employee-cell {
+  width: 18%;
+  font-weight: 600;
+  color: #42566f;
+}
+
+.photo-time-cell {
+  width: 16%;
+  text-align: center;
+}
+
+.time-value {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #325473;
+  margin-top: 8px;
+}
+
+.time-photo {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #d9e1ec;
+  display: block;
+  margin: 0 auto;
+}
+
+.photo-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  border: 1px dashed #d1d8e2;
+  color: #9aa6b2;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  background: #f8fafc;
+}
+
+.action-value-cell {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #325473;
+  width: 17%;
+  text-align: center;
+}
+
+.no-records {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px !important;
+  font-style: italic;
+}
+
+.records-summary {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.records-summary h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.summary-table-wrapper {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .records-container {
+    padding: 15px 10px;
+  }
+
+  .records-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .date-filter {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .records-filters {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-filter {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .date-input {
+    width: 100%;
+  }
+
+  .records-table th,
+  .records-table td {
+    padding: 12px 10px;
+    font-size: 12px;
+  }
+
+  .records-table {
+    min-width: 920px;
+  }
+
+  .date-cell,
+  .employee-cell,
+  .photo-time-cell,
+  .action-value-cell {
+    width: auto;
+  }
+
+  .time-photo,
+  .photo-placeholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  .records-header h2 {
+    font-size: 20px;
+  }
+
+}

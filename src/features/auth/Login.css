@@ -1,0 +1,245 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url('/Background.png') center/cover no-repeat;
+}
+
+.login-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 410px;
+  position: relative;
+  padding-top: 45px;
+}
+
+.login-logo {
+  display: block;
+  width: 92px;
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 4px;
+  background: url('/Background.png') center/cover no-repeat;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.login-card h1 {
+  color: #325473;
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  text-align: center;
+}
+
+.login-card h2 {
+  color: #333;
+  margin: 0 0 30px 0;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.login-card p {
+  color: #555;
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.error-message {
+  background: url('/Background.png') center/cover no-repeat;
+  color: #c33;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #325473;
+  pointer-events: none;
+}
+
+.input-with-icon .icon-lock {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.input-with-icon input {
+  padding-left: 34px;
+}
+
+.input-with-icon.has-right-button input {
+  padding-right: 68px;
+}
+
+.show-password-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #555;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  outline: none;
+  box-shadow: none;
+}
+
+.show-password-toggle:hover {
+  color: #325473;
+}
+
+.show-password-toggle:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.show-password-toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.show-password-toggle::-moz-focus-inner {
+  border: 0;
+}
+
+.show-password-toggle .icon-eye {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #325473;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background: url('/Background.png') center/cover no-repeat;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.toggle-auth {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+.toggle-auth button {
+  background: none;
+  border: none;
+  color: #325473;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.email-readonly {
+  background-color: #f5f5f5 !important;
+  cursor: not-allowed !important;
+  color: #666 !important;
+}
+
+.email-info {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  .login-card {
+    padding: 24px;
+    border-radius: 8px;
+    padding-top: 45px;
+  }
+
+  .login-logo {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+
+  .login-card h1 {
+    font-size: 18px;
+  }
+
+  .login-card h2 {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+}
+
+
+

@@ -1,0 +1,175 @@
+.dtr-report {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.report-controls {
+  margin-bottom: 30px;
+}
+
+.report-controls h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+}
+
+.controls-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.date-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-input label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+}
+
+.date-input input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.select-input select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  background: white;
+}
+
+.fetch-btn,
+.export-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.fetch-btn {
+  background: url('/Background.png') center/cover no-repeat;
+  color: white;
+}
+
+.fetch-btn:hover:not(:disabled) {
+  background: url('/Background.png') center/cover no-repeat;
+  transform: translateY(-2px);
+}
+
+.export-btn {
+  background: url('/Background.png') center/cover no-repeat;
+  color: white;
+}
+
+.export-btn:hover:not(:disabled) {
+  background: url('/Background.png') center/cover no-repeat;
+  transform: translateY(-2px);
+}
+
+.fetch-btn:disabled,
+.export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  padding: 40px;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 40px;
+}
+
+.report-content {
+  margin-top: 30px;
+}
+
+.user-report {
+  margin-bottom: 40px;
+}
+
+.user-report h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.report-table thead {
+  background: url('/Background.png') center/cover no-repeat;
+}
+
+.report-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+  font-size: 14px;
+}
+
+.report-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.report-table tr:hover {
+  background: url('/Background.png') center/cover no-repeat;
+}
+
+.report-table .hours {
+  font-weight: bold;
+  color: #325473;
+}
+
+@media (max-width: 768px) {
+  .dtr-report {
+    padding: 16px;
+  }
+
+  .controls-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-input {
+    width: 100%;
+  }
+
+  .fetch-btn,
+  .export-btn {
+    width: 100%;
+  }
+
+  .report-content {
+    overflow-x: auto;
+  }
+
+  .report-table {
+    min-width: 720px;
+  }
+}
+
+

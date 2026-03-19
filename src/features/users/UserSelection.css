@@ -1,0 +1,177 @@
+.user-selection-container {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    linear-gradient(180deg, rgba(237, 244, 251, 0.55) 0%, rgba(214, 227, 241, 0.62) 100%),
+    url('/Background.png') center/cover no-repeat;
+}
+
+.user-selection-card {
+  width: min(100%, 760px);
+  padding: 32px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 24px 60px rgba(24, 45, 79, 0.18);
+  text-align: center;
+}
+
+.user-selection-header {
+  margin-bottom: 10px;
+}
+
+.user-selection-card h1 {
+  margin: 0;
+  color: #294a6d;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  margin: 0 0 24px;
+  color: #627792;
+  font-size: 15px;
+}
+
+.loading,
+.error-message,
+.no-records {
+  margin: 0 0 24px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: #f4f7fb;
+  color: #5c6d81;
+}
+
+.error-message {
+  background: #fff1f1;
+  color: #b04141;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.user-card {
+  min-height: 0;
+  padding: 8px 14px;
+  border: 2px solid #d4e0ec;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f9fbfe 0%, #eef4fa 100%);
+  color: #294a6d;
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-2px);
+  border-color: #9eb9d1;
+  box-shadow: 0 12px 24px rgba(41, 74, 109, 0.12);
+}
+
+.user-card.selected {
+  background: #042342 !important;
+}
+
+.user-name {
+  width: 100%;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.selection-actions {
+  width: min(100%, 360px);
+  margin: 0 auto;
+  display: grid;
+  gap: 12px;
+}
+
+.confirm-btn,
+.user-logout-btn {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+}
+
+.confirm-btn {
+  background: linear-gradient(180deg, #031c35 0%, #315473 100%) !important;
+}
+
+.confirm-btn:hover:not(:disabled),
+.user-logout-btn:hover {
+  transform: translateY(-1px);
+}
+
+.confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.user-logout-btn {
+  background: linear-gradient(180deg, #031c35 0%, #315473 100%)!important;
+}
+
+.user-logout-btn:hover {
+  box-shadow: 0 10px 20px rgba(50, 84, 115, 0.12);
+}
+
+@media (max-width: 700px) {
+  .user-selection-container {
+    padding: 16px;
+  }
+
+  .user-selection-card {
+    padding: 24px 18px;
+    border-radius: 22px;
+  }
+
+  .subtitle {
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .users-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .user-card {
+    min-height: 0;
+    padding: 10px 14px;
+    border-radius: 14px;
+  }
+
+  .user-name {
+    font-size: 14px;
+  }
+
+  .selection-actions {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .confirm-btn,
+  .user-logout-btn {
+    min-height: 44px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+}
