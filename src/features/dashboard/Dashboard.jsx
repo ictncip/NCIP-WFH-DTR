@@ -7,14 +7,16 @@ import './Dashboard.css';
 const TimeTracking = lazy(() => import('../tracking/TimeTracking'));
 const EmployeeList = lazy(() => import('../employees/EmployeeList'));
 const DTRReport = lazy(() => import('../reports/DTRReport'));
+const getInitialTab = (selectedUser) => (selectedUser?.isAdmin ? 'records' : 'tracking');
 
 const Dashboard = ({ initialSelectedUser, onLogout }) => {
-  const [activeTab, setActiveTab] = useState('records');
+  const [activeTab, setActiveTab] = useState(getInitialTab(initialSelectedUser));
   const [selectedUser, setSelectedUser] = useState(initialSelectedUser || null);
   const { userData, logout } = useAuth();
+  const currentSelectedUser = initialSelectedUser || selectedUser;
   const isAdmin = String(userData?.role || '').trim().toLowerCase() === 'admin'
     || userData?.isAdmin === true
-    || selectedUser?.isAdmin;
+    || currentSelectedUser?.isAdmin;
 
 
   const handleLogout = async () => {
@@ -28,7 +30,7 @@ const Dashboard = ({ initialSelectedUser, onLogout }) => {
 
 
   // Show user selection if no user is selected yet
-  if (!selectedUser) {
+  if (!currentSelectedUser) {
     return <UserSelection onSelectUser={setSelectedUser} />;
   }
 
@@ -39,11 +41,11 @@ const Dashboard = ({ initialSelectedUser, onLogout }) => {
       <header className="dashboard-header">
         <div className="header-left">
           <h1>Daily Time Record System</h1>
-          <p>Selected: {userData.office}</p>
+          <p>Selected: {userData?.office || currentSelectedUser?.name || '-'}</p>
         </div>
         <div className="header-right">
-          <span className="current-user-badge">{selectedUser.name}</span>
-          {!selectedUser?.isAdmin && (
+          <span className="current-user-badge">{currentSelectedUser.name}</span>
+          {!currentSelectedUser?.isAdmin && (
             <button onClick={() => setSelectedUser(null)} className="back-to-selection-btn">
               Change User
             </button>
@@ -54,7 +56,7 @@ const Dashboard = ({ initialSelectedUser, onLogout }) => {
 
 
       <nav className="dashboard-nav">
-        {!selectedUser?.isAdmin && (
+        {!currentSelectedUser?.isAdmin && (
           <button
             className={`nav-btn ${activeTab === 'tracking' ? 'active' : ''}`}
             onClick={() => setActiveTab('tracking')}
@@ -88,10 +90,10 @@ const Dashboard = ({ initialSelectedUser, onLogout }) => {
 
 
       <div className="dashboard-content">
-        {activeTab === 'records' && <Records selectedUser={selectedUser} />}
+        {activeTab === 'records' && <Records selectedUser={currentSelectedUser} />}
         {activeTab === 'tracking' && (
           <Suspense fallback={<p className="loading">Loading time tracking...</p>}>
-            <TimeTracking selectedUser={selectedUser} />
+            <TimeTracking selectedUser={currentSelectedUser} />
           </Suspense>
         )}
         {activeTab === 'employees' && (

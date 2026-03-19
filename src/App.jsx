@@ -50,6 +50,7 @@ function AppContent() {
   if (isAdmin) {
     return (
       <Dashboard
+        key="admin-dashboard"
         initialSelectedUser={{
           id: 'admin',
           name: userData?.name || user?.email || 'Admin',
@@ -62,7 +63,7 @@ function AppContent() {
 
   // Regular user must select their name
   if (selectedUser) {
-    return <Dashboard initialSelectedUser={selectedUser} onLogout={handleLogout} />
+    return <Dashboard key={selectedUser.id} initialSelectedUser={selectedUser} onLogout={handleLogout} />
   }
 
   return <UserSelection onSelectUser={setSelectedUser} />
