@@ -2,6 +2,25 @@ import { useState } from 'react';
 import { useAuth } from '../../context/useAuth';
 import './Login.css';
 
+const getLoginErrorMessage = (error) => {
+  const code = String(error?.code || '').trim();
+
+  if (
+    code === 'auth/invalid-email' ||
+    code === 'auth/invalid-credential' ||
+    code === 'auth/wrong-password' ||
+    code === 'auth/user-not-found'
+  ) {
+    return 'Invalid email or password.';
+  }
+
+  if (code === 'auth/too-many-requests') {
+    return 'Too many login attempts. Please try again later.';
+  }
+
+  return 'Unable to sign in. Please try again.';
+};
+
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +38,7 @@ const Login = ({ onLoginSuccess }) => {
       await login(email, password);
       onLoginSuccess();
     } catch (err) {
-      setError(err.message);
+      setError(getLoginErrorMessage(err));
     } finally {
       setLoading(false);
     }

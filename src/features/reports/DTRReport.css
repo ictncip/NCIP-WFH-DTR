@@ -24,6 +24,7 @@
 .date-input {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .date-input label {
@@ -38,14 +39,22 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 14px;
+  min-height: 42px;
+  box-sizing: border-box;
+  background: #fff;
+  color: #333;
 }
 
+.date-input input[type="text"],
+.date-input input[type="date"],
 .select-input select {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 14px;
   background: white;
+  min-height: 42px;
+  box-sizing: border-box;
 }
 
 .fetch-btn,
@@ -122,7 +131,7 @@
 
 .report-table th {
   padding: 12px;
-  text-align: left;
+  text-align: center;
   font-weight: bold;
   color: #333;
   border-bottom: 2px solid #ddd;
@@ -135,6 +144,10 @@
   font-size: 14px;
 }
 
+.report-table tbody td + td {
+  border-left: 1px solid #e3e8ef;
+}
+
 .report-table tr:hover {
   background: url('/Background.png') center/cover no-repeat;
 }
@@ -142,6 +155,28 @@
 .report-table .hours {
   font-weight: bold;
   color: #325473;
+}
+
+.report-table .accomplishment-cell {
+  min-width: 160px;
+  max-width: 220px;
+  line-height: 1.45;
+  color: #42566f;
+  white-space: normal;
+  word-break: break-word;
+  vertical-align: top;
+}
+
+.report-table .table-gap-head,
+.report-table .table-gap-cell {
+  width: 0;
+  min-width: 0;
+  padding: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 6px solid #ffffff !important;
+  border-right: 0 !important;
+  background: transparent !important;
 }
 
 @media (max-width: 768px) {
@@ -152,15 +187,27 @@
   .controls-row {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
   }
 
   .date-input {
     width: 100%;
   }
 
+  .date-input input,
+  .select-input select {
+    width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
   .fetch-btn,
   .export-btn {
     width: 100%;
+    min-height: 44px;
+    font-size: 15px;
   }
 
   .report-content {
@@ -168,8 +215,22 @@
   }
 
   .report-table {
-    min-width: 720px;
+    min-width: 1080px;
   }
 }
 
+@media (max-width: 480px) {
+  .dtr-report {
+    padding: 14px 12px;
+  }
 
+  .report-controls h2 {
+    margin-bottom: 16px;
+    font-size: 20px;
+  }
+
+  .date-input label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+}

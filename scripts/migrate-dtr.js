@@ -24,6 +24,14 @@ const toDateKey = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+const toUserNameSlug = (value) => {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'unknown-user';
+};
+
 const getTs = (value) => {
   if (!value) return null;
   if (value.toDate) return value.toDate();
@@ -61,7 +69,7 @@ const main = async () => {
     if (!ts || !data.userId) return;
 
     const dateKey = toDateKey(ts);
-    const key = `${data.userId}_${dateKey}`;
+    const key = `${dateKey}_${toUserNameSlug(data.userName)}_${data.userId}`;
 
     let record = dailyMap.get(key);
     if (!record) {

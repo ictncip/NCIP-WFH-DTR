@@ -96,6 +96,8 @@ const DTRReport = () => {
         breakIn: breakIn ? breakIn.toLocaleTimeString() : '',
         timeOutPhoto: day.timeOutPhoto || '',
         timeOut: timeOut ? timeOut.toLocaleTimeString() : '',
+        morningAccomplishment: day.breakOutAccomplishment || '',
+        afternoonAccomplishment: day.timeOutAccomplishment || '',
         hours: formatWorkedTime(hours)
       };
     });
@@ -188,13 +190,19 @@ const DTRReport = () => {
             <table className="report-table">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Name</th>
-                  <th>Time In</th>
-                  <th>Break Out</th>
-                  <th>Break In</th>
-                  <th>Time Out</th>
-                  <th>Hours Worked</th>
+                  <th rowSpan="2">Date</th>
+                  <th rowSpan="2">Name</th>
+                  <th rowSpan="2">Time In</th>
+                  <th rowSpan="2">Break Out</th>
+                  <th rowSpan="2">Break In</th>
+                  <th rowSpan="2">Time Out</th>
+                  <th rowSpan="2">Hours Worked</th>
+                  <th rowSpan="2" className="table-gap-head" aria-hidden="true"></th>
+                  <th colSpan="2">Accomplishments</th>
+                </tr>
+                <tr>
+                  <th>Morning</th>
+                  <th>Afternoon</th>
                 </tr>
               </thead>
               <tbody>
@@ -214,6 +222,9 @@ const DTRReport = () => {
                       <td>{breakIn ? breakIn.toLocaleTimeString() : '-'}</td>
                       <td>{timeOut ? timeOut.toLocaleTimeString() : '-'}</td>
                       <td className="hours">{formatWorkedTime(hours)}</td>
+                      <td className="table-gap-cell" aria-hidden="true"></td>
+                      <td className="accomplishment-cell">{day.breakOutAccomplishment || '-'}</td>
+                      <td className="accomplishment-cell">{day.timeOutAccomplishment || '-'}</td>
                     </tr>
                   );
                 })}

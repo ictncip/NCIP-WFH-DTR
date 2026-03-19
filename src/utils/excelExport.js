@@ -18,6 +18,8 @@ export const exportToExcel = async (rows, startDate, endDate) => {
       'Break Out',
       'Break In',
       'Time Out',
+      'Morning Accomplishment',
+      'Afternoon Accomplishment',
       'Hours Worked'
     ]
   ];
@@ -30,6 +32,8 @@ export const exportToExcel = async (rows, startDate, endDate) => {
       row.breakOut || '-',
       row.breakIn || '-',
       row.timeOut || '-',
+      row.morningAccomplishment || '-',
+      row.afternoonAccomplishment || '-',
       row.hours
     ]);
   });
@@ -42,6 +46,8 @@ export const exportToExcel = async (rows, startDate, endDate) => {
     { wch: 12 },
     { wch: 12 },
     { wch: 12 },
+    { wch: 28 },
+    { wch: 28 },
     { wch: 12 }
   ];
 

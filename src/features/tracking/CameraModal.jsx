@@ -6,6 +6,7 @@ const CameraModal = ({
   cameraOpen,
   photoDataUrl,
   setPendingType,
+  setPendingAccomplishment,
   setPhotoDataUrl,
   stopCamera,
   videoRef,
@@ -172,6 +173,7 @@ const CameraModal = ({
 
   const handleCancel = () => {
     setPendingType("");
+    setPendingAccomplishment("");
     setPhotoDataUrl("");
     stopCamera();
     setCameraError("");

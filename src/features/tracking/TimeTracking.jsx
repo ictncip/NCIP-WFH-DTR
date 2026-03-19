@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/useAuth';
-import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, Timestamp, where } from 'firebase/firestore';
 import CameraModal from './CameraModal';
+import { buildDtrDocumentId } from '../../utils/dtrDocumentId';
 import './TimeTracking.css';
 
 const TimeTracking = ({ selectedUser }) => {
@@ -11,6 +12,7 @@ const TimeTracking = ({ selectedUser }) => {
   // Stores the current work status of the user
   // possible values: idle, working, on_break, offline
   const [status, setStatus] = useState('idle');
+  const [todayRecord, setTodayRecord] = useState(null);
 
   // Live clock
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -30,6 +32,12 @@ const TimeTracking = ({ selectedUser }) => {
   // Stores which action is waiting for photo confirmation
   // example: time_in, break_out, break_in, time_out
   const [pendingType, setPendingType] = useState('');
+  const [pendingAccomplishment, setPendingAccomplishment] = useState('');
+  const [accomplishmentModalOpen, setAccomplishmentModalOpen] = useState(false);
+  const [accomplishmentInput, setAccomplishmentInput] = useState('');
+  const [accomplishmentError, setAccomplishmentError] = useState('');
+  const [duplicateWarningOpen, setDuplicateWarningOpen] = useState(false);
+  const [duplicateActionType, setDuplicateActionType] = useState('');
 
   // Refs for video, canvas, and media stream
   const videoRef = useRef(null);
@@ -96,18 +104,31 @@ const TimeTracking = ({ selectedUser }) => {
     if (!selectedUser) return;
 
     const dateKey = getDateKey(new Date());
-    const docRef = doc(db, 'dtr', `${selectedUser.id}_${dateKey}`);
 
     try {
-      const snap = await getDoc(docRef);
+      const baseRef = collection(db, 'dtr');
+      const todayQuery = query(
+        baseRef,
+        where('userId', '==', selectedUser.id),
+        where('dateKey', '==', dateKey)
+      );
+      const snapshot = await getDocs(todayQuery);
 
       // If no record exists yet, reset status
-      if (!snap.exists()) {
+      if (snapshot.empty) {
+        setTodayRecord(null);
         setStatus('idle');
         return;
       }
 
-      const record = snap.data();
+      const expectedId = buildDtrDocumentId({
+        dateKey,
+        userName: selectedUser.name,
+        userId: selectedUser.id
+      });
+      const matchingDoc = snapshot.docs.find((entry) => entry.id === expectedId) || snapshot.docs[0];
+      const record = matchingDoc.data();
+      setTodayRecord({ _docId: matchingDoc.id, ...record });
       updateStatus(record);
     } catch (error) {
       console.error('Error fetching logs:', error);
@@ -127,14 +148,19 @@ const TimeTracking = ({ selectedUser }) => {
   }, [fetchTodayLogs]);
 
   // Saves a specific log action to Firestore
-  const addLog = useCallback(async (type, photoUrl = '') => {
+  const addLog = useCallback(async (type, photoUrl = '', accomplishment = '') => {
     if (!user || !selectedUser) return;
 
     setLoading(true);
 
     try {
       const dateKey = getDateKey(new Date());
-      const docRef = doc(db, 'dtr', `${selectedUser.id}_${dateKey}`);
+      const documentId = todayRecord?._docId || buildDtrDocumentId({
+        dateKey,
+        userName: selectedUser.name,
+        userId: selectedUser.id
+      });
+      const docRef = doc(db, 'dtr', documentId);
 
       // Base fields stored in the record
       const update = {
@@ -153,6 +179,7 @@ const TimeTracking = ({ selectedUser }) => {
       if (type === 'break_out') {
         update.breakOut = Timestamp.now();
         if (photoUrl) update.breakOutPhoto = photoUrl;
+        if (accomplishment) update.breakOutAccomplishment = accomplishment;
       }
 
       if (type === 'break_in') {
@@ -163,6 +190,7 @@ const TimeTracking = ({ selectedUser }) => {
       if (type === 'time_out') {
         update.timeOut = Timestamp.now();
         if (photoUrl) update.timeOutPhoto = photoUrl;
+        if (accomplishment) update.timeOutAccomplishment = accomplishment;
       }
 
       // merge:true prevents overwriting the whole document
@@ -175,7 +203,7 @@ const TimeTracking = ({ selectedUser }) => {
     } finally {
       setLoading(false);
     }
-  }, [user, selectedUser, fetchTodayLogs]);
+  }, [user, selectedUser, todayRecord, fetchTodayLogs]);
 
   // Returns "active" class when button matches current status
   const getButtonClass = (buttonType) => {
@@ -275,10 +303,12 @@ const TimeTracking = ({ selectedUser }) => {
     if (!pendingType || !photoDataUrl) return;
 
     const typeToLog = pendingType;
+    const accomplishment = pendingAccomplishment;
     setPendingType('');
+    setPendingAccomplishment('');
     stopCamera();
-    addLog(typeToLog, photoDataUrl);
-  }, [addLog, pendingType, photoDataUrl, stopCamera]);
+    addLog(typeToLog, photoDataUrl, accomplishment);
+  }, [addLog, pendingAccomplishment, pendingType, photoDataUrl, stopCamera]);
 
   // Clears current photo and opens camera again
   const retakePhoto = useCallback(async () => {
@@ -287,10 +317,64 @@ const TimeTracking = ({ selectedUser }) => {
   }, [startCamera]);
 
   // Starts camera for a specific log action
-  const handleCameraFor = async (type) => {
+  const openAccomplishmentModal = (type) => {
+    setPendingType(type);
+    setPendingAccomplishment('');
+    setAccomplishmentInput('');
+    setAccomplishmentError('');
+    setAccomplishmentModalOpen(true);
+  };
+
+  const closeAccomplishmentModal = () => {
+    setAccomplishmentModalOpen(false);
+    setAccomplishmentInput('');
+    setAccomplishmentError('');
+    setPendingType('');
+    setPendingAccomplishment('');
+  };
+
+  const closeDuplicateWarning = () => {
+    setDuplicateWarningOpen(false);
+    setDuplicateActionType('');
+  };
+
+  const proceedWithLogAction = async (type) => {
+    if (type === 'break_out' || type === 'time_out') {
+      openAccomplishmentModal(type);
+      return;
+    }
+
     setPhotoDataUrl('');
+    setPendingAccomplishment('');
     setPendingType(type);
     await startCamera();
+  };
+
+  const submitAccomplishment = async () => {
+    const trimmed = accomplishmentInput.trim();
+    if (!trimmed) {
+      setAccomplishmentError('Please type your accomplishment before continuing.');
+      return;
+    }
+
+    setPendingAccomplishment(trimmed);
+    setAccomplishmentError('');
+    setAccomplishmentModalOpen(false);
+    await startCamera();
+  };
+
+  const accomplishmentHeading = pendingType === 'time_out'
+    ? 'Afternoon Accomplishment'
+    : 'Morning Accomplishment';
+
+  const handleCameraFor = async (type) => {
+    if (hasExistingLog(todayRecord, type)) {
+      setDuplicateActionType(type);
+      setDuplicateWarningOpen(true);
+      return;
+    }
+
+    await proceedWithLogAction(type);
   };
 
   return (
@@ -353,11 +437,66 @@ const TimeTracking = ({ selectedUser }) => {
         </div>
       </div>
 
+      {duplicateWarningOpen && (
+        <div className="accomplishment-overlay" role="dialog" aria-modal="true">
+          <div className="accomplishment-modal warning-modal">
+            <h3>Warning</h3>
+            <p className="accomplishment-copy">You already logged for this time.</p>
+            <div className="accomplishment-actions">
+              <button type="button" className="accomplishment-btn accomplishment-cancel" onClick={closeDuplicateWarning}>
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="accomplishment-btn accomplishment-continue"
+                onClick={async () => {
+                  const type = duplicateActionType;
+                  closeDuplicateWarning();
+                  await proceedWithLogAction(type);
+                }}
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {accomplishmentModalOpen && (
+        <div className="accomplishment-overlay" role="dialog" aria-modal="true">
+          <div className="accomplishment-modal">
+            <h3>{accomplishmentHeading}</h3>
+            <p className="accomplishment-copy">Please type your accomplishment before continuing.</p>
+            <textarea
+              id="accomplishment-input"
+              className="accomplishment-input"
+              value={accomplishmentInput}
+              onChange={(e) => {
+                setAccomplishmentInput(e.target.value);
+                if (accomplishmentError) setAccomplishmentError('');
+              }}
+              placeholder="Type your accomplishment here"
+              rows={4}
+            />
+            {accomplishmentError && <p className="accomplishment-error">{accomplishmentError}</p>}
+            <div className="accomplishment-actions">
+              <button type="button" className="accomplishment-btn accomplishment-cancel" onClick={closeAccomplishmentModal}>
+                Cancel
+              </button>
+              <button type="button" className="accomplishment-btn accomplishment-continue" onClick={submitAccomplishment}>
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <CameraModal
         cameraError={cameraError}
         cameraOpen={cameraOpen}
         photoDataUrl={photoDataUrl}
         setPendingType={setPendingType}
+        setPendingAccomplishment={setPendingAccomplishment}
         setPhotoDataUrl={setPhotoDataUrl}
         setCameraError={setCameraError}
         stopCamera={stopCamera}
@@ -377,6 +516,19 @@ const getDateKey = (date) => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+};
+
+const hasExistingLog = (record, type) => {
+  if (!record) return false;
+
+  const fieldMap = {
+    time_in: 'timeIn',
+    break_out: 'breakOut',
+    break_in: 'breakIn',
+    time_out: 'timeOut'
+  };
+
+  return Boolean(record[fieldMap[type]]);
 };
 
 export default TimeTracking;

@@ -190,6 +190,92 @@
   background: #9db5c8;
 }
 
+.accomplishment-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 28, 43, 0.52);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 18px;
+}
+
+.accomplishment-modal {
+  width: min(100%, 400px);
+  background: #fff;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 24px 60px rgba(17, 37, 60, 0.28);
+  text-align: center;
+}
+
+.accomplishment-modal h3 {
+  margin: 0 0 8px;
+  color: #35587d;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.accomplishment-copy {
+  margin: 0 0 16px;
+  color: #5f6f81;
+  font-size: 14px;
+  text-align: center;
+}
+
+.accomplishment-input {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid #c8d5e1;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-size: 16px;
+  line-height: 1.45;
+  resize: vertical;
+  box-sizing: border-box;
+  color: #23384f;
+}
+
+.accomplishment-input:focus {
+  outline: none;
+  border-color: #44688d;
+  box-shadow: 0 0 0 4px rgba(68, 104, 141, 0.14);
+}
+
+.accomplishment-error {
+  margin: 10px 0 0;
+  color: #b13e4a;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.accomplishment-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.accomplishment-btn {
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accomplishment-cancel {
+  background: #dbe6ef;
+  color: #35587d;
+}
+
+.accomplishment-continue {
+  background: #44688d;
+  color: #fff;
+}
+
 @media (max-width: 960px) {
   .time-tracking {
     padding: 12px;
@@ -238,6 +324,23 @@
   .status-badge {
     min-height: 40px;
     font-size: 18px;
+  }
+
+  .accomplishment-modal {
+    border-radius: 20px;
+    padding: 18px;
+  }
+
+  .accomplishment-modal h3 {
+    font-size: 22px;
+  }
+
+  .accomplishment-actions {
+    flex-direction: column-reverse;
+  }
+
+  .accomplishment-btn {
+    width: 100%;
   }
 
   .date {

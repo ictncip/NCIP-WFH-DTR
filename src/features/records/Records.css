@@ -1,6 +1,6 @@
 .records-container {
   padding: 30px 20px;
-  max-width: 1000px;
+  max-width: 1380px;
   margin: 0 auto;
 }
 
@@ -73,6 +73,10 @@
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s;
+  min-height: 42px;
+  box-sizing: border-box;
+  background: #fff;
+  color: #333;
 }
 
 .date-input:hover,
@@ -133,6 +137,11 @@
   padding: 16px 20px;
   font-size: 14px;
   color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+.records-table tbody td + td {
+  border-left: 1px solid #e3e8ef;
 }
 
 .date-cell {
@@ -184,8 +193,38 @@
   font-family: 'Courier New', monospace;
   font-weight: bold;
   color: #325473;
-  width: 17%;
+  white-space: nowrap;
   text-align: center;
+}
+
+.accomplishment-cell {
+  min-width: 160px;
+  max-width: 220px;
+  color: #42566f;
+  line-height: 1.45;
+  white-space: normal;
+  word-break: break-word;
+  vertical-align: top;
+}
+
+.records-table th:last-child,
+.records-table td.action-value-cell {
+  width: 96px;
+  min-width: 96px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.table-gap-head,
+.table-gap-cell {
+  width: 0;
+  min-width: 0;
+  padding: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 6px solid #ffffff !important;
+  border-right: 0 !important;
+  background: transparent !important;
 }
 
 .no-records {
@@ -193,6 +232,7 @@
   color: #999;
   padding: 40px 20px !important;
   font-style: italic;
+  border-left: 0 !important;
 }
 
 .records-summary {
@@ -226,27 +266,37 @@
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
+    gap: 8px;
   }
 
   .records-filters {
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
   }
 
   .search-filter {
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
+    gap: 8px;
   }
 
   .search-input {
     width: 100%;
     min-width: 0;
+    min-height: 44px;
+    font-size: 16px;
+    box-sizing: border-box;
   }
 
   .date-input {
     width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   .records-table th,
@@ -256,13 +306,12 @@
   }
 
   .records-table {
-    min-width: 920px;
+    min-width: 1280px;
   }
 
   .date-cell,
   .employee-cell,
-  .photo-time-cell,
-  .action-value-cell {
+  .photo-time-cell {
     width: auto;
   }
 
@@ -276,4 +325,30 @@
     font-size: 20px;
   }
 
+}
+
+@media (max-width: 480px) {
+  .records-container {
+    padding: 14px 8px;
+  }
+
+  .records-header {
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .records-header h2 {
+    font-size: 18px;
+  }
+
+  .date-filter,
+  .search-filter {
+    width: 100%;
+  }
+
+  .date-filter label,
+  .search-filter label {
+    font-size: 13px;
+    line-height: 1.3;
+  }
 }
