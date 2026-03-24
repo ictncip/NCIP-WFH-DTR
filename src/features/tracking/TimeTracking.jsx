@@ -367,6 +367,17 @@ const TimeTracking = ({ selectedUser }) => {
     ? 'Afternoon Accomplishment'
     : 'Morning Accomplishment';
 
+  const duplicateActionLabel = (type) => {
+    const labels = {
+      time_in: 'TIME IN',
+      break_out: 'BREAK OUT',
+      break_in: 'BREAK IN',
+      time_out: 'TIME OUT'
+    };
+
+    return labels[type] || 'LOG';
+  };
+
   const handleCameraFor = async (type) => {
     if (hasExistingLog(todayRecord, type)) {
       setDuplicateActionType(type);
@@ -441,7 +452,10 @@ const TimeTracking = ({ selectedUser }) => {
         <div className="accomplishment-overlay" role="dialog" aria-modal="true">
           <div className="accomplishment-modal warning-modal">
             <h3>Warning</h3>
-            <p className="accomplishment-copy">You already logged for this time.</p>
+            <p className="accomplishment-copy">
+              {`You already have a ${duplicateActionLabel(duplicateActionType)} today.`}
+            </p>
+            <p className="accomplishment-copy">Do you want to continue?</p>
             <div className="accomplishment-actions">
               <button type="button" className="accomplishment-btn accomplishment-cancel" onClick={closeDuplicateWarning}>
                 Cancel

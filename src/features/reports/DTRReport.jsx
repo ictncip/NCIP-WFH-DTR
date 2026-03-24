@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { db } from '../../firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { exportToExcel } from '../../utils/excelExport';
+import { exportDtrToPdf } from '../../utils/pdfExport';
 import { getOfficeDisplayName } from '../../utils/officeDirectory';
 import { calculateHours, getDisplayName } from './reportsUtils';
 import './DTRReport.css';
@@ -73,36 +74,45 @@ const DTRReport = () => {
     }
   };
 
-  const handleExport = async () => {
+  const buildExportRows = () => rows.map(({ report, day }) => {
+    const timeIn = day.timeIn?.toDate ? day.timeIn.toDate() : day.timeIn;
+    const breakOut = day.breakOut?.toDate ? day.breakOut.toDate() : day.breakOut;
+    const breakIn = day.breakIn?.toDate ? day.breakIn.toDate() : day.breakIn;
+    const timeOut = day.timeOut?.toDate ? day.timeOut.toDate() : day.timeOut;
+    const hours = calculateHours(timeIn, breakOut, breakIn, timeOut);
+
+    return {
+      name: report.name || 'Unknown',
+      date: day.dateKey || (timeIn ? timeIn.toLocaleDateString() : ''),
+      timeInPhoto: day.timeInPhoto || '',
+      timeIn: timeIn ? timeIn.toLocaleTimeString() : '',
+      breakOutPhoto: day.breakOutPhoto || '',
+      breakOut: breakOut ? breakOut.toLocaleTimeString() : '',
+      breakInPhoto: day.breakInPhoto || '',
+      breakIn: breakIn ? breakIn.toLocaleTimeString() : '',
+      timeOutPhoto: day.timeOutPhoto || '',
+      timeOut: timeOut ? timeOut.toLocaleTimeString() : '',
+      morningAccomplishment: day.breakOutAccomplishment || '',
+      afternoonAccomplishment: day.timeOutAccomplishment || '',
+      hours: formatWorkedTime(hours)
+    };
+  });
+
+  const handleExcelExport = async () => {
     if (rows.length === 0) {
       alert('No data to export');
       return;
     }
-    const exportRows = rows.map(({ report, day }) => {
-      const timeIn = day.timeIn?.toDate ? day.timeIn.toDate() : day.timeIn;
-      const breakOut = day.breakOut?.toDate ? day.breakOut.toDate() : day.breakOut;
-      const breakIn = day.breakIn?.toDate ? day.breakIn.toDate() : day.breakIn;
-      const timeOut = day.timeOut?.toDate ? day.timeOut.toDate() : day.timeOut;
-      const hours = calculateHours(timeIn, breakOut, breakIn, timeOut);
+    await exportToExcel(buildExportRows(), startDate, endDate);
+  };
 
-      return {
-        name: report.name || 'Unknown',
-        date: day.dateKey || (timeIn ? timeIn.toLocaleDateString() : ''),
-        timeInPhoto: day.timeInPhoto || '',
-        timeIn: timeIn ? timeIn.toLocaleTimeString() : '',
-        breakOutPhoto: day.breakOutPhoto || '',
-        breakOut: breakOut ? breakOut.toLocaleTimeString() : '',
-        breakInPhoto: day.breakInPhoto || '',
-        breakIn: breakIn ? breakIn.toLocaleTimeString() : '',
-        timeOutPhoto: day.timeOutPhoto || '',
-        timeOut: timeOut ? timeOut.toLocaleTimeString() : '',
-        morningAccomplishment: day.breakOutAccomplishment || '',
-        afternoonAccomplishment: day.timeOutAccomplishment || '',
-        hours: formatWorkedTime(hours)
-      };
-    });
+  const handlePdfExport = () => {
+    if (rows.length === 0) {
+      alert('No data to export');
+      return;
+    }
 
-    await exportToExcel(exportRows, startDate, endDate);
+    exportDtrToPdf(buildExportRows(), startDate, endDate);
   };
 
   const officeOptions = reports
@@ -170,12 +180,19 @@ const DTRReport = () => {
           <button onClick={fetchReport} disabled={loading} className="fetch-btn">
             {loading ? 'Loading...' : 'Generate Report'}
           </button>
-          <button 
-            onClick={handleExport} 
+          <button
+            onClick={handleExcelExport}
             disabled={reports.length === 0}
             className="export-btn"
           >
-            Export
+            Export as Excel
+          </button>
+          <button
+            onClick={handlePdfExport}
+            disabled={reports.length === 0}
+            className="export-btn"
+          >
+            Export as PDF
           </button>
         </div>
       </div>

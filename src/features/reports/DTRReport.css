@@ -65,6 +65,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
+  min-height: 42px;
 }
 
 .fetch-btn {

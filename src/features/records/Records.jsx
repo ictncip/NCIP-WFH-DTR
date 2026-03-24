@@ -119,11 +119,25 @@ const Records = ({ selectedUser }) => {
     </td>
   );
 
+  const renderColGroup = ({ showEmployee = false, showPhotos = false } = {}) => (
+    <colgroup>
+      <col className="records-col-date" />
+      {showEmployee && <col className="records-col-employee" />}
+      <col className={showPhotos ? 'records-col-photo-time' : 'records-col-time'} />
+      <col className={showPhotos ? 'records-col-photo-time' : 'records-col-time'} />
+      <col className={showPhotos ? 'records-col-photo-time' : 'records-col-time'} />
+      <col className={showPhotos ? 'records-col-photo-time' : 'records-col-time'} />
+      <col className="records-col-hours" />
+      <col className="records-col-accomplishment" />
+      <col className="records-col-accomplishment" />
+    </colgroup>
+  );
+
   const renderRows = (records, { showPhotos = false, showEmployee = false } = {}) => {
     if (records.length === 0) {
       return (
         <tr>
-          <td colSpan={showEmployee ? 10 : 9} className="no-records">
+          <td colSpan={showEmployee ? 9 : 8} className="no-records">
             No time records found
           </td>
         </tr>
@@ -158,8 +172,7 @@ const Records = ({ selectedUser }) => {
           <td className="action-value-cell">
             {formatWorkedTime(totalHours)}
           </td>
-          <td className="table-gap-cell" aria-hidden="true"></td>
-          <td className="accomplishment-cell">{record.breakOutAccomplishment || '-'}</td>
+          <td className="accomplishment-cell accomplishment-start">{record.breakOutAccomplishment || '-'}</td>
           <td className="accomplishment-cell">{record.timeOutAccomplishment || '-'}</td>
         </tr>
       );
@@ -202,21 +215,24 @@ const Records = ({ selectedUser }) => {
       ) : (
         <div className="table-wrapper">
           <table className="records-table">
+            {renderColGroup({
+              showPhotos: true,
+              showEmployee: selectedUser?.isAdmin
+            })}
             <thead>
               <tr>
-                <th rowSpan="2">Date</th>
-                {selectedUser?.isAdmin && <th rowSpan="2">Name</th>}
-                <th rowSpan="2">Time In</th>
-                <th rowSpan="2">Break Out</th>
-                <th rowSpan="2">Break In</th>
-                <th rowSpan="2">Time Out</th>
-                <th rowSpan="2">Total Hours</th>
-                <th rowSpan="2" className="table-gap-head" aria-hidden="true"></th>
-                <th colSpan="2">Accomplishments</th>
+                <th rowSpan="2" className="date-head">Date</th>
+                {selectedUser?.isAdmin && <th rowSpan="2" className="employee-head">Name</th>}
+                <th rowSpan="2" className="time-head">Time In</th>
+                <th rowSpan="2" className="time-head">Break Out</th>
+                <th rowSpan="2" className="time-head">Break In</th>
+                <th rowSpan="2" className="time-head">Time Out</th>
+                <th rowSpan="2" className="hours-head">Total Hours</th>
+                <th colSpan="2" className="accomplishment-head accomplishment-start-head">Accomplishments</th>
               </tr>
               <tr>
-                <th>Morning</th>
-                <th>Afternoon</th>
+                <th className="accomplishment-head accomplishment-start-head">Morning</th>
+                <th className="accomplishment-head">Afternoon</th>
               </tr>
             </thead>
             <tbody>
@@ -232,7 +248,7 @@ const Records = ({ selectedUser }) => {
                 if (filteredLogs.length === 0) {
                   return (
                     <tr>
-                      <td colSpan={selectedUser?.isAdmin ? 10 : 9} className="no-records">
+                      <td colSpan={selectedUser?.isAdmin ? 9 : 8} className="no-records">
                         No time records found for this date
                       </td>
                     </tr>
@@ -257,20 +273,20 @@ const Records = ({ selectedUser }) => {
           ) : (
             <div className="table-wrapper summary-table-wrapper">
               <table className="records-table">
+                {renderColGroup()}
                 <thead>
                   <tr>
-                    <th rowSpan="2">Date</th>
-                    <th rowSpan="2">Time In</th>
-                    <th rowSpan="2">Break Out</th>
-                    <th rowSpan="2">Break In</th>
-                    <th rowSpan="2">Time Out</th>
-                    <th rowSpan="2">Total Hours</th>
-                    <th rowSpan="2" className="table-gap-head" aria-hidden="true"></th>
-                    <th colSpan="2">Accomplishments</th>
+                    <th rowSpan="2" className="date-head">Date</th>
+                    <th rowSpan="2" className="time-head">Time In</th>
+                    <th rowSpan="2" className="time-head">Break Out</th>
+                    <th rowSpan="2" className="time-head">Break In</th>
+                    <th rowSpan="2" className="time-head">Time Out</th>
+                    <th rowSpan="2" className="hours-head">Total Hours</th>
+                    <th colSpan="2" className="accomplishment-head accomplishment-start-head">Accomplishments</th>
                   </tr>
                   <tr>
-                    <th>Morning</th>
-                    <th>Afternoon</th>
+                    <th className="accomplishment-head accomplishment-start-head">Morning</th>
+                    <th className="accomplishment-head">Afternoon</th>
                   </tr>
                 </thead>
                 <tbody>{renderRows(summaryRecords)}</tbody>

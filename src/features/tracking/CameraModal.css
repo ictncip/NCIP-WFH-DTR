@@ -62,7 +62,7 @@
 .camera-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   background: #0f172a;
   overflow: hidden;
   border-radius: 12px;
@@ -95,10 +95,10 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 55%;
-  height: 70%;
+  width: 54%;
+  height: 68%;
   max-width: 260px;
-  max-height: 340px;
+  max-height: 280px;
   transform: translate(-50%, -50%);
   border: 3px dashed #d1d5db;
   border-radius: 50% / 60%;
@@ -231,7 +231,7 @@
 
 .photo-review {
   width: min(100%, 420px);
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   margin: 0 auto;
   padding: 10px;
   border-radius: 16px;
@@ -318,6 +318,7 @@
   }
 
   .camera-container {
+    aspect-ratio: 4 / 5;
     min-height: 0;
   }
 
@@ -342,6 +343,7 @@
 
   .photo-review {
     width: 100%;
+    aspect-ratio: 4 / 5;
   }
 
   .camera-btn {
